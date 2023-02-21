@@ -30,35 +30,47 @@ let dots = document.querySelector(".dots");
 let tabSlide = slides.length;
 let banner = document.getElementById("banner");
 let count = 0;
-
 //console.log(paragraph);
 //console.log(paragraph.innerHTML);
 
-//clic gauche
-arrowLeft.addEventListener("click", (e)=>{
-	numIndex--;	
-	displaySlider(numIndex);
-	deletDotL();
-});
+
 //utilise les for pour afficher les dots, faire une boucle sur le nombre d'entrée qui feront apparaitre les dots
 
-//dots
+//dots Inclure les Div dot dans la div Dots
 for (let i = 0; i < tabSlide;i++){
 	//console.log(slides[i].point);
 	dots.insertAdjacentHTML("beforeend",`${slides[i].point}`); 
 }
 let divDot = document.querySelectorAll('.dot');
-//console.log(divDot);
-
+let lastDot = divDot[3];
+let firstDot = divDot[0];
+console.log(lastDot)
+console.log(firstDot)
+console.log(tabSlide)
 //clic droit
-arrowRight.addEventListener("click",(e)=>{
+arrowRight.addEventListener("click", (e)=>{
+	console.log(index)
+	console.log(numIndex)
 	numIndex++;
+	index++;
 	displaySlider(numIndex);
 	deletDotR();
+	lastClick();
+	return numIndex,index;
+});
+
+//clic gauche
+arrowLeft.addEventListener("click", (e)=>{
+	numIndex--;	
+	index--;
+	displaySlider(numIndex);
+	deletDotL();
+	firstClick();
+	//console.log(count);
 });
 
 const displaySlider =(numIndex)=>{ 
-	console.log(numIndex);
+	//console.log(numIndex);
 	banner.insertAdjacentHTML("beforeend",`<img class="banner-img" src="./assets/images/slideshow/${slides[numIndex].image}" alt="${slides[numIndex].image}">`);
 	paragraph.innerHTML = (slides[numIndex].tagLine);
 	divDot[numIndex].classList.add("dot_selected");
@@ -74,13 +86,22 @@ function deletDotL(){
 
 function deletDotR(){
 	for(slides[numIndex].point of slides){
-		divDot[numIndex-1].classList.remove("dot_selected");
-	}
+		divDot[index].classList.remove("dot_selected");
+	}return index;
+}
+let index = -1;
+
+function lastClick(){
+	if (numIndex >= tabSlide -1){
+		numIndex = -1;
+	}return numIndex;	
 }
 
-
-
-
+function firstClick(){
+	if (numIndex <= 0){
+		numIndex = +1;
+	}
+}
 
 
 
