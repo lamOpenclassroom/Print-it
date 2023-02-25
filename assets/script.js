@@ -21,7 +21,6 @@ const arrowLeft = document.querySelector(".arrow_left");
 const arrowRight = document.querySelector(".arrow_right");
 const paragraph = document.querySelector("p");
 const dotsElement = document.querySelector(".dots");
-
 const numberOfSlide = slides.length;
 const banner = document.getElementById("banner");
 let count = 0;
@@ -36,12 +35,12 @@ function dotElement() {
 	}
 }
 dotElement();
-const dot = document.querySelector(".dot");
+const dot = document.querySelectorAll(".dot");
 console.log(dot)
+dot[0].classList.add("dot_selected");
 
 
-
-function changePhoto(image) { //j'ai retiré count du paramètre de la fonction du return aussi
+function changePhoto(image) { 
 	if (count == 0) {
 		image = image.setAttribute("src", "./assets/images/slideshow/slide1.jpg");
 	}
@@ -59,16 +58,18 @@ function changePhoto(image) { //j'ai retiré count du paramètre de la fonction 
 }
 
 //dot_selected
-function dotSelect(){
-	numIndex++;
-	count++;
-	if (numIndex === count) {
-		dot.classList.add("dot_selected")
-	}else{
-		dot.classList.remove("dot_selected")
-	}
+function dotSelect(item) {
+	console.log(item);
+	item.classList.remove("dot_selected")
+	dot[numIndex].classList.add("dot_selected");
+	//item = item.classList.add("dot_selected");
+    /*if (item.classList.contains("dot_selected")) {
+        item.classList.remove("dot_selected");
+    }
+    else {
+        item.classList.add("dot_selected");
+    }*/
 }
-
 
 
 //clic droit
@@ -77,7 +78,7 @@ arrowRight.addEventListener("click", (e) => {  //faire la boucle
 	count++;
 	displaySlider(numIndex);
 	changePhoto(image);
-	dotSelect();
+	dot.forEach(dotSelect);
 	if (numIndex >= numberOfSlide - 1) {
 		numIndex = -1;
 		count = -1;
@@ -90,10 +91,10 @@ arrowLeft.addEventListener("click", (e) => {  //faire la boucle
 	count--;
 	displaySlider(numIndex);
 	changePhoto(image);
-	/*if (numIndex <= 0){
-		numIndex = -1;
-		count = -1;
-	}*/
+	if (numIndex <= 0){
+		numIndex = -2;
+		count = -2;
+	}
 });
 
 const displaySlider = (numIndex = 0) => {
