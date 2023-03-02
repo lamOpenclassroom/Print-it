@@ -24,11 +24,6 @@ const dotsElement = document.querySelector(".dots");
 const numberOfSlide = slides.length;
 const banner = document.getElementById("banner");
 
-//inclure la balise img dans mon HTML et initialiser les images à l'index 0.
-banner.insertAdjacentHTML("beforeend", `<img class="banner-img" src="./assets/images/slideshow/${slides[0].image}"  alt="Image de Print-it">`);
-//récupèrer la balise img.
-const image = document.querySelector(".banner-img");
-
 //Parcourir l'array pour afficher les dots proportionellement au nombre d'images.
 function dotElement() {
 	for (let i = 0; i < numberOfSlide; i++) {
@@ -37,58 +32,48 @@ function dotElement() {
 }
 dotElement();
 
-//constante qui récupère un tableau de dot.
-const dot = document.querySelectorAll(".dot");
-console.log(dot);
-
-//initialiser le format dot_selected à l'index 0. 
-dot[0].classList.add("dot_selected");
-
+//Récupère un array de dot.
+const dots = document.querySelectorAll(".dot");
+console.log(dots);
 //Fonction Slide du Texte et image.
 const displaySlider = (numIndex = 0) => {
+	const imgBanner = banner.firstElementChild;
+	if (!imgBanner.classList.contains("banner-img")){
+		banner.insertAdjacentHTML("afterbegin", `<img class="banner-img" src="./assets/images/slideshow/${slides[numIndex].image}"  alt="Image de Print-it">`);
+		dots[0].classList.add("dot_selected");
+	}else{
+		imgBanner.setAttribute("src",`./assets/images/slideshow/${slides[numIndex].image}`);
+	}
 	paragraph.innerHTML = (slides[numIndex].tagLine);
-	image.setAttribute("src", "./assets/images/slideshow/"+slides[numIndex].image);
 	return numIndex;
 }
 let numIndex = displaySlider();
 
-//Fonction dotSelected à assigner à la méthode forEach.
+//Fonction dotSelected assigné à la méthode forEach.
 function dotSelect(item) {
-	item.classList.remove("dot_selected")
-	dot[numIndex].classList.add("dot_selected");
+	item.classList.remove("dot_selected");
+	dots[numIndex].classList.add("dot_selected");
 }
-
-//Fonction Boucle infini vers la droite assignée à la fonction (anonyme) click.
-function returnFirst(){
-	if (numIndex >= numberOfSlide -1) {
-		console.log("vous allez revenir à l'index 0");
-		numIndex = -1;
-	}
-}
-arrowRight.addEventListener("click", returnFirst);
-
-//Fonction Boucle infini vers la gauche assignée à la fonction (anonyme) click.
-function returnLast(){
-	if (numIndex <= 0) {
-		console.log("vous allez revenir au dernier index");
-		numIndex = numberOfSlide;
-	}
-}
-arrowLeft.addEventListener("click", returnLast); 
 
 //clic droit
 arrowRight.addEventListener("click", (e) => {  
 	numIndex++;
+	if (numIndex >= numberOfSlide){
+		numIndex = 0;
+	}
 	displaySlider(numIndex);
-	dot.forEach(dotSelect); //Pour chaque item de mon tableau dot renvoyer la fonction dotSelect
+	dots.forEach(dotSelect); //Pour chaque item de mon tableau dot renvoyer la fonction dotSelect		
 	console.log(numIndex);
 });
 
 //clic gauche
 arrowLeft.addEventListener("click", (e) => {  
 	numIndex--;
+	if(numIndex < 0){
+		numIndex = numberOfSlide -1;
+	}
 	displaySlider(numIndex);
-	dot.forEach(dotSelect);
+	dots.forEach(dotSelect);	
 	console.log(numIndex);
 });
 
